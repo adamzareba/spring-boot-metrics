@@ -1,0 +1,27 @@
+group 'com.adamzareba'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    springBootVersion = '1.5.9.RELEASE'
+    halBrowser = '3.0.2.RELEASE'
+    dropWizardVersion = '3.2.5'
+    influxDBVersion = '2.8'
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    compile "org.springframework.data:spring-data-rest-hal-browser:$halBrowser"
+    compile "io.dropwizard.metrics:metrics-core:$dropWizardVersion"
+    compile "io.dropwizard.metrics:metrics-jvm:$dropWizardVersion"
+    compile "org.influxdb:influxdb-java:$influxDBVersion"
+}
+
