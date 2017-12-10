@@ -30,7 +30,7 @@ public class MetricsConfig {
 
         return (metricValue) -> {
             Point point = Point.measurement(metricValue.getName()).time(metricValue.getTimestamp().getTime(), TimeUnit.MILLISECONDS)
-                    .addField("metricValue", metricValue.getValue()).build();
+                    .addField("value", metricValue.getValue()).build();
             influxDB.write(point);
         };
     }
