@@ -26,5 +26,7 @@ dependencies {
     compile "io.dropwizard.metrics:metrics-jvm:$dropWizardVersion"
     compile "com.ryantenney.metrics:metrics-spring:$springMetricsVersion"
     compile "com.readytalk:metrics3-statsd:$statsdMetricsVersion"
+    compile "com.readytalk:metrics2-statsd:$statsdMetricsVersion"
+    compile "com.readytalk:metrics-statsd-common:$statsdMetricsVersion"
 }
 

@@ -1,17 +1,14 @@
 package com.adamzareba.spring.boot.metrics.controller;
-//
+
 //import org.influxdb.InfluxDB;
 //import org.influxdb.dto.BatchPoints;
 //import org.influxdb.dto.Point;
+
 import com.codahale.metrics.annotation.Timed;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.TimeUnit;
 
 @RestController
 public class ApplicationController {
@@ -22,7 +19,7 @@ public class ApplicationController {
 //    @Value("${spring.influx.database}")
 //    private String database;
 
-    @Timed
+    @Timed(name = "service.home")
     @RequestMapping("/")
     @ResponseBody
     public String home() {

@@ -5,6 +5,8 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
 import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
 import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
+import static com.readytalk.metrics.StatsDReporter.Builder;
+
 import com.readytalk.metrics.StatsDReporter;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
@@ -37,7 +39,7 @@ public class MetricsConfig extends MetricsConfigurerAdapter {
         reporter.start(period, TimeUnit.SECONDS);
     }
 
-    private StatsDReporter.Builder getStatsDReporterBuilder(MetricRegistry metricRegistry) {
+    private Builder getStatsDReporterBuilder(MetricRegistry metricRegistry) {
         metricRegistry.register("gc", new GarbageCollectorMetricSet());
         metricRegistry.register("memory", new MemoryUsageGaugeSet());
         metricRegistry.register("threads", new ThreadStatesGaugeSet());
