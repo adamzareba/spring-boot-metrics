@@ -2,11 +2,10 @@ package com.adamzareba.spring.boot.metrics.config;
 
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.jvm.ClassLoadingGaugeSet;
 import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
 import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
 import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
-import static com.readytalk.metrics.StatsDReporter.Builder;
-
 import com.readytalk.metrics.StatsDReporter;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
@@ -16,33 +15,42 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.readytalk.metrics.StatsDReporter.Builder;
+
 @Configuration
 @EnableMetrics
 public class MetricsConfig extends MetricsConfigurerAdapter {
 
+    private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
+    private static final String PROP_METRIC_REG_JVM_THREADS = "jvm.threads";
+    private static final String PROP_METRIC_REG_JVM_GARBAGE = "jvm.gc";
+    private static final String PROP_METRIC_REG_JVM_CLASSES = "jvm.classes";
+
     @Value("${statsD.host}")
-    public String hostIP;
+    private String host;
 
     @Value("${statsD.port}")
-    public int port;
+    private int port;
 
     @Value("${statsD.period}")
-    public int period;
+    private int period;
 
     @Value("${statsD.prefix}")
-    public String prefix;
+    private String prefix;
 
     @Override
     public void configureReporters(MetricRegistry metricRegistry) {
-        StatsDReporter reporter = getStatsDReporterBuilder(metricRegistry).build(hostIP, port);
+        StatsDReporter reporter = getStatsDReporterBuilder(metricRegistry).build(host, port);
         registerReporter(reporter);
         reporter.start(period, TimeUnit.SECONDS);
     }
 
     private Builder getStatsDReporterBuilder(MetricRegistry metricRegistry) {
-        metricRegistry.register("gc", new GarbageCollectorMetricSet());
-        metricRegistry.register("memory", new MemoryUsageGaugeSet());
-        metricRegistry.register("threads", new ThreadStatesGaugeSet());
+        metricRegistry.register(PROP_METRIC_REG_JVM_MEMORY, new MemoryUsageGaugeSet());
+        metricRegistry.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());
+        metricRegistry.register(PROP_METRIC_REG_JVM_GARBAGE, new GarbageCollectorMetricSet());
+        metricRegistry.register(PROP_METRIC_REG_JVM_CLASSES, new ClassLoadingGaugeSet());
+
         return StatsDReporter.forRegistry(metricRegistry)
                 .prefixedWith(prefix)
                 .convertRatesTo(TimeUnit.SECONDS)
